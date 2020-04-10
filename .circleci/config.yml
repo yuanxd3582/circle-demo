@@ -1,0 +1,22 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1
+jobs:
+  build:
+    executor:
+      name: node/default
+      tag: '10.4'
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "a2:d2:88:d4:cd:fe:bf:2c:ab:12:fb:3e:0a:18:91:22"
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: npm install
+      - run: 
+          name: Build
+          command: npm run build
+      - run:
+          name: Deploy
+          command: 'chmod +x scripts/deploy.sh && ./scripts/deploy.sh'
